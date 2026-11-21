@@ -149,22 +149,96 @@ function applyPalette(palette) {
   });
 }
 
+// 4色ストライプのサンプル（比重 41/26/18/15）を作る
+function createSwatch(colors) {
+  const swatch = document.createElement("span");
+  swatch.className = "palette-swatch";
+  swatch.setAttribute("aria-hidden", "true");
+  colors.forEach((color) => {
+    const seg = document.createElement("span");
+    seg.style.background = color;
+    swatch.appendChild(seg);
+  });
+  return swatch;
+}
+
+// パレットを適用し、トグル表示と一覧の選択中マークを同期する
+function setPalette(index) {
+  const palette = PALETTES[index];
+  applyPalette(palette);
+  const swatch = document.getElementById("palette-current-swatch");
+  [...swatch.children].forEach((seg, i) => {
+    if (palette.colors[i]) seg.style.background = palette.colors[i];
+  });
+  document.getElementById("palette-current-name").textContent = palette.name;
+  document.querySelectorAll(".palette-item").forEach((item, i) => {
+    item.setAttribute("aria-selected", String(i === index));
+  });
+}
+
 function initPalette() {
-  const select = document.getElementById("palette-select");
+  const menu = document.getElementById("palette-menu");
+  const toggle = document.getElementById("palette-toggle");
+  const list = document.getElementById("palette-list");
+
+  function openList() {
+    list.hidden = false;
+    toggle.setAttribute("aria-expanded", "true");
+  }
+  function closeList() {
+    list.hidden = true;
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  // 一覧の項目を全パレット分作る（名前＋選択中マークの下に、項目幅いっぱいの4色バー）
   PALETTES.forEach((p, i) => {
-    const opt = document.createElement("option");
-    opt.value = String(i);
-    opt.textContent = p.name;
-    select.appendChild(opt);
+    const item = document.createElement("button");
+    item.type = "button";
+    item.className = "palette-item";
+    item.setAttribute("role", "option");
+    item.setAttribute("aria-selected", "false");
+    const head = document.createElement("span");
+    head.className = "palette-item-head";
+    const name = document.createElement("span");
+    name.className = "palette-item-name";
+    name.textContent = p.name;
+    head.appendChild(name);
+    const check = document.createElement("span");
+    check.className = "palette-check";
+    check.setAttribute("aria-hidden", "true");
+    check.textContent = "✓";
+    head.appendChild(check);
+    item.appendChild(head);
+    // 色サンプルはヘッダーのストライプと同じバー形式（比重 41/26/18/15）
+    const bar = createSwatch(p.colors);
+    bar.classList.add("palette-bar");
+    item.appendChild(bar);
+    // 選んだら即時反映して閉じる（その訪問中だけ有効）
+    item.addEventListener("click", () => {
+      setPalette(i);
+      closeList();
+    });
+    list.appendChild(item);
   });
+
+  toggle.addEventListener("click", () => {
+    if (list.hidden) openList();
+    else closeList();
+  });
+  // 外側クリックで閉じる
+  document.addEventListener("click", (e) => {
+    if (!list.hidden && !menu.contains(e.target)) closeList();
+  });
+  // Escで閉じる
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !list.hidden) {
+      closeList();
+      toggle.focus();
+    }
+  });
+
   // アクセスごとにランダムで1つ選ぶ（前回の選択は保存・復元しない）
-  const initial = Math.floor(Math.random() * PALETTES.length);
-  select.value = String(initial);
-  applyPalette(PALETTES[initial]);
-  // プルダウンで選んだ場合はその訪問中だけ即時反映する
-  select.addEventListener("change", () => {
-    applyPalette(PALETTES[Number(select.value)]);
-  });
+  setPalette(Math.floor(Math.random() * PALETTES.length));
 }
 
 let allRecipes = [];

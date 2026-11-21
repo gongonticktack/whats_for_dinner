@@ -12,11 +12,19 @@
     <span class="s1"></span><span class="s2"></span><span class="s3"></span><span class="s4"></span>
   </div>
   <div class="header-inner">
-    <h1>レシピボード</h1>
-    <p class="header-sub">レシピ一覧＋ランダムピック</p>
-    <div class="header-controls">
-      <label class="palette-label" for="palette-select">カラーパレット</label>
-      <select id="palette-select" aria-label="カラーパレット"></select>
+    <div class="header-top">
+      <div class="header-title">
+        <h1>レシピボード</h1>
+        <p class="header-sub">レシピ一覧＋ランダムピック</p>
+      </div>
+      <div class="palette-menu" id="palette-menu">
+        <button type="button" class="palette-toggle" id="palette-toggle" aria-haspopup="listbox" aria-expanded="false" aria-label="カラーパレット">
+          <span class="palette-swatch" id="palette-current-swatch" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span class="palette-current-name" id="palette-current-name"></span>
+          <span class="palette-caret" aria-hidden="true">▽</span>
+        </button>
+        <div class="palette-list" id="palette-list" role="listbox" aria-label="カラーパレット" hidden></div>
+      </div>
     </div>
   </div>
 </header>
