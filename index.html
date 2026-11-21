@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>レシピ</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="site-header">
+  <div class="palette-stripe" aria-hidden="true">
+    <span class="s1"></span><span class="s2"></span><span class="s3"></span><span class="s4"></span>
+  </div>
+  <div class="header-inner">
+    <h1>レシピボード</h1>
+    <p class="header-sub">レシピ一覧＋ランダムピック</p>
+  </div>
+</header>
+
+<main>
+  <section class="summary" id="summary" aria-label="集計">
+    <div class="summary-item"><span class="summary-num" id="count-total">–</span><span class="summary-label">レシピ</span></div>
+    <div class="summary-item"><span class="summary-num" id="count-favorites">–</span><span class="summary-label">お気に入り</span></div>
+    <div class="summary-item"><span class="summary-num" id="count-uncooked">–</span><span class="summary-label">未作成</span></div>
+    <div class="summary-item"><span class="summary-num" id="count-shown">–</span><span class="summary-label">表示中</span></div>
+  </section>
+
+  <section class="random-pick" aria-label="ランダムピック">
+    <button type="button" id="btn-random" class="btn-random">ランダムで1品選ぶ</button>
+    <label class="random-option">
+      <input type="checkbox" id="opt-uncooked-only">
+      未作成だけから選ぶ
+    </label>
+    <p class="pick-result" id="pick-result" hidden></p>
+  </section>
+
+  <section class="controls" aria-label="検索と絞り込み">
+    <input type="search" id="search" placeholder="検索（タイトル・材料・メモ）" autocomplete="off">
+    <select id="filter-category" aria-label="カテゴリ">
+      <option value="">全て</option>
+      <option value="主菜">主菜</option>
+      <option value="副菜">副菜</option>
+      <option value="ごはん・麺">ごはん・麺</option>
+      <option value="汁物・スープ">汁物・スープ</option>
+      <option value="デザート">デザート</option>
+    </select>
+  </section>
+
+  <p class="status-msg" id="status-msg" hidden></p>
+  <div id="groups"></div>
+</main>
+
+<footer>
+  <p>データ： Supabase（recipes）</p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

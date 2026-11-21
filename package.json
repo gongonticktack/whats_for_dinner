@@ -1,0 +1,1 @@
+{"devDependencies":{"wrangler":"^4"},"name":"recipes","private":true,"scripts":{"deploy":"wrangler deploy","dev":"wrangler dev"}}
