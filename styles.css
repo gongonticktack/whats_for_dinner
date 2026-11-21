@@ -1,17 +1,24 @@
 /* レシピボード
-   Color Hunt パレット: #F9ED69 / #F08A5D / #B83B5E / #6A2C70
-   メイン #B83B5E / サブ #6A2C70 / アクセント #F08A5D / 背景は #F9ED69 系から派生 */
+   配色は Color Hunt の4色パレットを JS（app.js の PALETTES）から
+   CSS変数へ適用して駆動する。パレット順の比重イメージは
+   メイン41% / サブ26% / ライト18% / アクセント15%（ヘッダーのストライプ）。
+   背景はパレットから導出し、最も明るい色を背景に固定しない。
+   :root の初期値は現行パレット #F9ED69 / #F08A5D / #B83B5E / #6A2C70。 */
 :root {
   --main: #b83b5e;
   --sub: #6a2c70;
   --light: #f08a5d;
   --accent: #f9ed69;
+  --accent-text: #b83b5e;
   --bg: #fdf9ec;
   --surface: #ffffff;
   --surface-muted: #fbeedc;
   --text: #3d2140;
   --muted: #7c5a72;
   --border: #eddcc8;
+  --on-main: #ffffff;
+  --header-sub: #f6cdd8;
+  --on-sub: #ffffff;
 }
 
 * { box-sizing: border-box; }
@@ -28,7 +35,7 @@ body {
 /* ヘッダー */
 .site-header {
   background: var(--main);
-  color: #fff;
+  color: var(--on-main);
 }
 .palette-stripe {
   display: flex;
@@ -50,8 +57,31 @@ body {
 }
 .header-sub {
   margin: 4px 0 0;
-  color: #f6cdd8;
+  color: var(--header-sub);
   font-size: 0.95rem;
+}
+.header-controls {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.palette-label {
+  font-size: 0.85rem;
+  color: var(--header-sub);
+}
+#palette-select {
+  padding: 6px 10px;
+  border: 1px solid color-mix(in srgb, var(--on-main) 45%, transparent);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: color-mix(in srgb, var(--on-main) 14%, var(--main));
+  color: var(--on-main);
+}
+#palette-select:focus {
+  outline: 2px solid var(--on-main);
+  outline-offset: 1px;
 }
 
 main {
@@ -80,7 +110,7 @@ main {
 .summary-num {
   font-size: 1.5rem;
   font-weight: 700;
-  color: var(--main);
+  color: var(--accent-text);
 }
 .summary-label {
   font-size: 0.85rem;
@@ -101,7 +131,7 @@ main {
 }
 .btn-random {
   background: var(--sub);
-  color: #fff;
+  color: var(--on-sub);
   border: none;
   border-radius: 8px;
   padding: 10px 20px;
@@ -125,7 +155,7 @@ main {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 700;
-  color: var(--main);
+  color: var(--accent-text);
 }
 
 /* 検索・絞り込み */
@@ -159,7 +189,7 @@ main {
 }
 
 .status-msg {
-  color: var(--main);
+  color: var(--accent-text);
   font-weight: 600;
 }
 
@@ -196,7 +226,7 @@ main {
 .card-picked {
   border: 2px solid var(--light);
   border-top: 4px solid var(--light);
-  background: #fff7e8;
+  background: color-mix(in srgb, var(--accent) 22%, var(--surface));
   box-shadow: 0 0 0 3px var(--accent);
 }
 
@@ -213,7 +243,7 @@ main {
   margin: 0;
 }
 .fav-star {
-  color: var(--light);
+  color: var(--accent-text);
   font-size: 1.1rem;
 }
 

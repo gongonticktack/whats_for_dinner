@@ -2,6 +2,171 @@
 
 const CATEGORY_ORDER = ["主菜", "副菜", "ごはん・麺", "汁物・スープ", "デザート"];
 
+// カラーパレット（Color Hunt の人気パレットから選定、現行・他サイト使用分は除外）
+// colors: パレット本来の4色（ストライプ表示用、比重 41/26/18/15）
+// vars:   役割（メイン/サブ/ライト/アクセント）と、パレットから導出した
+//         背景・面・文字色。暗いパレットは暗背景＋明文字、明るいパレットは
+//         明背景＋暗文字になるよう各パレットごとに定義する。
+const PALETTES = [
+  {
+    name: "Dusty Rose",
+    colors: ["#FFB4A2", "#E5989B", "#B5838D", "#6D6875"],
+    vars: {
+      main: "#6D6875", sub: "#8F5A66", light: "#FFB4A2", accent: "#E5989B",
+      accentText: "#9E4453",
+      bg: "#FBF2EE", surface: "#FFFFFF", surfaceMuted: "#F7E4DD",
+      text: "#38303E", muted: "#71617A", border: "#ECD6CF",
+      onMain: "#FFFFFF", headerSub: "#F7EDF3", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Coffee Beans",
+    colors: ["#DDB892", "#B08968", "#7F5539", "#9C6644"],
+    vars: {
+      main: "#7F5539", sub: "#935F3C", light: "#DDB892", accent: "#B08968",
+      accentText: "#8A5427",
+      bg: "#FAF4EA", surface: "#FFFFFF", surfaceMuted: "#F3E7D3",
+      text: "#3A2A1A", muted: "#7A6248", border: "#E7D6BC",
+      onMain: "#FFFFFF", headerSub: "#EBD9C3", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Sage Garden",
+    colors: ["#DDE5B6", "#ADC178", "#A98467", "#6C5849"],
+    vars: {
+      main: "#6C5849", sub: "#687636", light: "#DDE5B6", accent: "#ADC178",
+      accentText: "#5F6E2C",
+      bg: "#F7F8EC", surface: "#FFFFFF", surfaceMuted: "#EDF0DA",
+      text: "#3B3A2A", muted: "#646B4A", border: "#DEE3C2",
+      onMain: "#FFFFFF", headerSub: "#E4DCCF", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Terracotta Cream",
+    colors: ["#F4F1DE", "#E07A5F", "#3D405B", "#81B29A"],
+    vars: {
+      main: "#3D405B", sub: "#B44E33", light: "#F4F1DE", accent: "#E07A5F",
+      accentText: "#B54A30",
+      bg: "#FAF8EE", surface: "#FFFFFF", surfaceMuted: "#F1EDD8",
+      text: "#33354A", muted: "#60627A", border: "#E6E0C6",
+      onMain: "#FFFFFF", headerSub: "#D5D8E4", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Natural Beige",
+    colors: ["#FFE8D6", "#DDBEA9", "#CB997E", "#6B705C"],
+    vars: {
+      main: "#6B705C", sub: "#8A5A3B", light: "#FFE8D6", accent: "#CB997E",
+      accentText: "#8A5427",
+      bg: "#FBF5EC", surface: "#FFFFFF", surfaceMuted: "#F4E8D8",
+      text: "#3C3A30", muted: "#6B6857", border: "#E9DCC6",
+      onMain: "#FFFFFF", headerSub: "#F7F8EE", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Caramel Cream",
+    colors: ["#FEFAE0", "#FAEDCD", "#D4A373", "#CCD5AE"],
+    vars: {
+      main: "#8A5A2B", sub: "#6B7A40", light: "#FAEDCD", accent: "#D4A373",
+      accentText: "#96622A",
+      bg: "#FDFBF2", surface: "#FFFFFF", surfaceMuted: "#F7EFDA",
+      text: "#42351F", muted: "#756440", border: "#EDE3C4",
+      onMain: "#FFFFFF", headerSub: "#FAF0DC", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Spice Market",
+    colors: ["#EAE2B7", "#FCBF49", "#F77F00", "#D62828"],
+    vars: {
+      main: "#D62828", sub: "#A55800", light: "#EAE2B7", accent: "#FCBF49",
+      accentText: "#C22525",
+      bg: "#FBF7E8", surface: "#FFFFFF", surfaceMuted: "#F6EED3",
+      text: "#402A1E", muted: "#77603F", border: "#EAE0BC",
+      onMain: "#FFFFFF", headerSub: "#FFF0F0", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Citrus Grove",
+    colors: ["#FF7B54", "#FFB26B", "#FFD56B", "#939B62"],
+    vars: {
+      main: "#C2512F", sub: "#63733A", light: "#FFD56B", accent: "#FFB26B",
+      accentText: "#B44A28",
+      bg: "#FDF6E9", surface: "#FFFFFF", surfaceMuted: "#F9ECD2",
+      text: "#40342A", muted: "#72603F", border: "#F0DFC0",
+      onMain: "#FFFFFF", headerSub: "#FFFFFF", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Matcha Leaf",
+    colors: ["#DAD7CD", "#A3B18A", "#588157", "#3A5A40"],
+    vars: {
+      main: "#3A5A40", sub: "#4C724E", light: "#DAD7CD", accent: "#A3B18A",
+      accentText: "#3F6B45",
+      bg: "#F5F6EF", surface: "#FFFFFF", surfaceMuted: "#E9EBDD",
+      text: "#2E3B2E", muted: "#5C6952", border: "#DDE0CC",
+      onMain: "#FFFFFF", headerSub: "#D8E2D2", onSub: "#FFFFFF",
+    },
+  },
+  {
+    name: "Midnight Diner",
+    colors: ["#1D3557", "#457B9D", "#A8DADC", "#E63946"],
+    vars: {
+      main: "#1D3557", sub: "#A8DADC", light: "#457B9D", accent: "#E63946",
+      accentText: "#F28B82",
+      bg: "#101E33", surface: "#1B2A44", surfaceMuted: "#24344F",
+      text: "#EDF2F7", muted: "#A9BCD4", border: "#33465F",
+      onMain: "#FFFFFF", headerSub: "#C9D8EA", onSub: "#10233B",
+    },
+  },
+];
+
+const PALETTE_VAR_KEYS = {
+  main: "--main",
+  sub: "--sub",
+  light: "--light",
+  accent: "--accent",
+  accentText: "--accent-text",
+  bg: "--bg",
+  surface: "--surface",
+  surfaceMuted: "--surface-muted",
+  text: "--text",
+  muted: "--muted",
+  border: "--border",
+  onMain: "--on-main",
+  headerSub: "--header-sub",
+  onSub: "--on-sub",
+};
+
+function applyPalette(palette) {
+  const root = document.documentElement;
+  for (const [key, cssVar] of Object.entries(PALETTE_VAR_KEYS)) {
+    root.style.setProperty(cssVar, palette.vars[key]);
+  }
+  // ストライプはパレット本来の4色をそのまま使う
+  const stripe = document.querySelectorAll(".palette-stripe > span");
+  stripe.forEach((span, i) => {
+    if (palette.colors[i]) span.style.background = palette.colors[i];
+  });
+}
+
+function initPalette() {
+  const select = document.getElementById("palette-select");
+  PALETTES.forEach((p, i) => {
+    const opt = document.createElement("option");
+    opt.value = String(i);
+    opt.textContent = p.name;
+    select.appendChild(opt);
+  });
+  // アクセスごとにランダムで1つ選ぶ（前回の選択は保存・復元しない）
+  const initial = Math.floor(Math.random() * PALETTES.length);
+  select.value = String(initial);
+  applyPalette(PALETTES[initial]);
+  // プルダウンで選んだ場合はその訪問中だけ即時反映する
+  select.addEventListener("change", () => {
+    applyPalette(PALETTES[Number(select.value)]);
+  });
+}
+
 let allRecipes = [];
 let pickedId = null;
 
@@ -223,4 +388,5 @@ async function init() {
   document.getElementById("btn-random").addEventListener("click", pickRandom);
 }
 
+initPalette();
 init();
