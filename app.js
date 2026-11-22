@@ -7,9 +7,8 @@ const CATEGORY_ORDER = ["主菜", "副菜", "ごはん・麺", "汁物・スー�
 // vars:   役割（メイン/サブ/ライト/アクセント）と、パレットから導出した
 //         背景・面・文字色。暗いパレットは暗背景＋明文字、明るいパレットは
 //         明背景＋暗文字になるよう各パレットごとに定義する。
-// darkVars: 端末がダークモードのときだけ使う暗色版（明るいパレットにのみ定義）。
-//         ダークモードでは、元々暗いパレットは vars のまま表示し、明るい
-//         パレットだけ darkVars に切り替える（2026-11-22 Gomi指示）。
+//         端末のダーク/ライトモードでは切り替えず、常にパレットどおり
+//         表示する（2026-11-23 Gomi指示）。
 const PALETTES = [
   {
     name: "Dusty Rose",
@@ -21,13 +20,7 @@ const PALETTES = [
       text: "#38303E", muted: "#71617A", border: "#ECD6CF",
       onMain: "#FFFFFF", headerSub: "#F7EDF3", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#E5989B", sub: "#FFB4A2", light: "#E5989B", accent: "#FFB4A2",
-      accentText: "#FFB4A2",
-      bg: "#211D25", surface: "#2C2733", surfaceMuted: "#383140",
-      text: "#FAE9E2", muted: "#BE9AA4", border: "#4A4152",
-      onMain: "#38141F", headerSub: "#571F2E", onSub: "#47222C",
-    },
+    
   },
   {
     name: "Coffee Beans",
@@ -39,13 +32,7 @@ const PALETTES = [
       text: "#3A2A1A", muted: "#7A6248", border: "#E7D6BC",
       onMain: "#FFFFFF", headerSub: "#EBD9C3", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#8A5427", sub: "#DDB892", light: "#B08968", accent: "#DDB892",
-      accentText: "#DDB892",
-      bg: "#241811", surface: "#2E2015", surfaceMuted: "#3C2B1B",
-      text: "#F4E7D3", muted: "#C0A181", border: "#54402A",
-      onMain: "#FFFFFF", headerSub: "#F3E3C8", onSub: "#3A2410",
-    },
+    
   },
   {
     name: "Sage Garden",
@@ -57,13 +44,7 @@ const PALETTES = [
       text: "#3B3A2A", muted: "#646B4A", border: "#DEE3C2",
       onMain: "#FFFFFF", headerSub: "#E4DCCF", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#ADC178", sub: "#DDE5B6", light: "#ADC178", accent: "#ADC178",
-      accentText: "#C4D48F",
-      bg: "#211D16", surface: "#2C2820", surfaceMuted: "#3A352A",
-      text: "#F2F5DF", muted: "#A3A884", border: "#4E4636",
-      onMain: "#24300E", headerSub: "#35481A", onSub: "#333D14",
-    },
+    
   },
   {
     name: "Terracotta Cream",
@@ -75,13 +56,7 @@ const PALETTES = [
       text: "#33354A", muted: "#60627A", border: "#E6E0C6",
       onMain: "#FFFFFF", headerSub: "#D5D8E4", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#3D405B", sub: "#81B29A", light: "#81B29A", accent: "#E07A5F",
-      accentText: "#EE9A82",
-      bg: "#12141E", surface: "#1E212E", surfaceMuted: "#292D3D",
-      text: "#F4F1DE", muted: "#9AA0B4", border: "#3D405B",
-      onMain: "#FFFFFF", headerSub: "#B9BFD4", onSub: "#14231B",
-    },
+    
   },
   {
     name: "Natural Beige",
@@ -93,13 +68,7 @@ const PALETTES = [
       text: "#3C3A30", muted: "#6B6857", border: "#E9DCC6",
       onMain: "#FFFFFF", headerSub: "#F7F8EE", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#CB997E", sub: "#DDBEA9", light: "#DDBEA9", accent: "#CB997E",
-      accentText: "#DDBEA9",
-      bg: "#1D1F18", surface: "#292B22", surfaceMuted: "#36382C",
-      text: "#FBF0E4", muted: "#B4B49F", border: "#4C4F3E",
-      onMain: "#33200F", headerSub: "#40260F", onSub: "#3D2712",
-    },
+    
   },
   {
     name: "Caramel Cream",
@@ -111,13 +80,7 @@ const PALETTES = [
       text: "#42351F", muted: "#756440", border: "#EDE3C4",
       onMain: "#FFFFFF", headerSub: "#FAF0DC", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#D4A373", sub: "#CCD5AE", light: "#FAEDCD", accent: "#D4A373",
-      accentText: "#E3BC8D",
-      bg: "#231708", surface: "#2F2010", surfaceMuted: "#403015",
-      text: "#FEFAE0", muted: "#C9B98F", border: "#59431F",
-      onMain: "#38230C", headerSub: "#4E3010", onSub: "#2E3616",
-    },
+    
   },
   {
     name: "Spice Market",
@@ -129,13 +92,7 @@ const PALETTES = [
       text: "#402A1E", muted: "#77603F", border: "#EAE0BC",
       onMain: "#FFFFFF", headerSub: "#FFF0F0", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#D62828", sub: "#F77F00", light: "#FCBF49", accent: "#FCBF49",
-      accentText: "#FCBF49",
-      bg: "#250B0B", surface: "#331414", surfaceMuted: "#42201C",
-      text: "#F6F1DA", muted: "#C4A583", border: "#5C2E26",
-      onMain: "#FFFFFF", headerSub: "#FFF6E8", onSub: "#381C00",
-    },
+    
   },
   {
     name: "Citrus Grove",
@@ -147,13 +104,7 @@ const PALETTES = [
       text: "#40342A", muted: "#72603F", border: "#F0DFC0",
       onMain: "#FFFFFF", headerSub: "#FFFFFF", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#FF7B54", sub: "#A3AD72", light: "#FFD56B", accent: "#FFB26B",
-      accentText: "#FFB26B",
-      bg: "#1B1E11", surface: "#272A19", surfaceMuted: "#343823",
-      text: "#F9EFD2", muted: "#B3B98F", border: "#4B4F31",
-      onMain: "#3A1508", headerSub: "#571F0B", onSub: "#262B0A",
-    },
+    
   },
   {
     name: "Matcha Leaf",
@@ -165,13 +116,7 @@ const PALETTES = [
       text: "#2E3B2E", muted: "#5C6952", border: "#DDE0CC",
       onMain: "#FFFFFF", headerSub: "#D8E2D2", onSub: "#FFFFFF",
     },
-    darkVars: {
-      main: "#3A5A40", sub: "#A3B18A", light: "#588157", accent: "#A3B18A",
-      accentText: "#A3B18A",
-      bg: "#131C15", surface: "#1D2A1F", surfaceMuted: "#28382A",
-      text: "#F0EEE6", muted: "#9FAE94", border: "#40543F",
-      onMain: "#FFFFFF", headerSub: "#C9DCC0", onSub: "#1E2B12",
-    },
+    
   },
   {
     name: "Midnight Diner",
@@ -203,26 +148,11 @@ const PALETTE_VAR_KEYS = {
   onSub: "--on-sub",
 };
 
-const darkModeQuery = window.matchMedia("(prefers-color-scheme: dark)");
-let activePalette = null;
-
-// ダークモード時は、明るいパレットだけ darkVars（暗色版）に切り替える。
-// 元々暗いパレット（darkVars を持たない）はそのまま使う。
-function effectiveVars(palette) {
-  if (darkModeQuery.matches && palette.darkVars) return palette.darkVars;
-  return palette.vars;
-}
-
-darkModeQuery.addEventListener("change", () => {
-  if (activePalette) applyPalette(activePalette);
-});
 
 function applyPalette(palette) {
-  activePalette = palette;
-  const vars = effectiveVars(palette);
   const root = document.documentElement;
   for (const [key, cssVar] of Object.entries(PALETTE_VAR_KEYS)) {
-    root.style.setProperty(cssVar, vars[key]);
+    root.style.setProperty(cssVar, palette.vars[key]);
   }
   // ストライプはパレット本来の4色をそのまま使う
   const stripe = document.querySelectorAll(".palette-stripe > span");
