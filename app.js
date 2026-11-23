@@ -419,18 +419,26 @@ function render() {
   }
 }
 
-function pickRandom() {
+const RANDOM_GROUPS = {
+  main: { label: "メイン", categories: ["主菜", "ごはん・麺"] },
+  soup: { label: "汁物", categories: ["汁物・スープ"] },
+  sweet: { label: "スイーツ", categories: ["デザート"] },
+};
+
+function pickRandom(kind) {
+  const group = RANDOM_GROUPS[kind];
   const uncookedOnly = document.getElementById("opt-uncooked-only").checked;
+  const base = allRecipes.filter((r) => group.categories.includes(r.category));
   const pool = uncookedOnly
-    ? allRecipes.filter((r) => (r.cook_count || 0) === 0)
-    : allRecipes;
+    ? base.filter((r) => (r.cook_count || 0) === 0)
+    : base;
   const result = document.getElementById("pick-result");
 
   if (pool.length === 0) {
     pickedId = null;
     result.textContent = uncookedOnly
-      ? "未作成のレシピはありません。"
-      : "レシピがありません。";
+      ? "未作成の" + group.label + "レシピはありません。"
+      : group.label + "のレシピがありません。";
     result.hidden = false;
     render();
     return;
@@ -444,7 +452,7 @@ function pickRandom() {
   document.getElementById("filter-category").value = "";
   render();
 
-  result.textContent = "今日の一品： " + picked.title;
+  result.textContent = "今日の" + group.label + "： " + picked.title;
   result.hidden = false;
 
   const card = document.querySelector(
@@ -485,7 +493,9 @@ async function init() {
 
   document.getElementById("search").addEventListener("input", render);
   document.getElementById("filter-category").addEventListener("change", render);
-  document.getElementById("btn-random").addEventListener("click", pickRandom);
+  document.getElementById("btn-random-main").addEventListener("click", () => pickRandom("main"));
+  document.getElementById("btn-random-soup").addEventListener("click", () => pickRandom("soup"));
+  document.getElementById("btn-random-sweet").addEventListener("click", () => pickRandom("sweet"));
 }
 
 initPalette();
